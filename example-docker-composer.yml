@@ -1,0 +1,48 @@
+version: "3.9"
+
+services: 
+  
+  auth:
+    build: ./auth
+    depends_on:
+      - mongo
+    environment: 
+      - EXPOSE=3000
+      - MONGO_URI2=mongodb://localhost:27017/node-test-api
+      - MONGO_URI=mongodb://mongo:27017/test
+      - JWT_SECRET=vfmhg45353432jijsdf734io34o543Gegdfvdghg345!!!
+
+  users:
+    build: ./users
+    depends_on:
+      - mongo
+    environment: 
+      - EXPOSE=3000
+      - MONGO_URI2=mongodb://localhost:27017/node-test-api
+      - MONGO_URI=mongodb://mongo:27017/test
+      - JWT_SECRET=vfmhg45353432jijsdf734io34o543Gegdfvdghg345!!!
+
+  hotels:
+    build: ./hotels
+    depends_on:
+      - mongo
+    environment: 
+      - EXPOSE=3000
+      - MONGO_URI2=mongodb://localhost:27017/node-test-api
+      - MONGO_URI=mongodb://mongo:27017/test
+      - JWT_SECRET=vfmhg45353432jijsdf734io34o543Gegdfvdghg345!!!
+
+  mongo:
+    image: mongo:latest
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8080:8080"
+    volumes: 
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on: 
+      - mongo
+      - auth
+      - users
+      - hotels
